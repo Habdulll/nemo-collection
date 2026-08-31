@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nemo — The Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+  <span class="toggle-icon" id="toggleIcon">☀</span>
+</button>
+
+<!-- ============ HERO / ABOUT ============ -->
+<section class="hero" id="hero">
+  <div class="hero-blob blob-1"></div>
+  <div class="hero-blob blob-2"></div>
+  <div class="hero-blob blob-3"></div>
+
+  <div class="hero-content">
+    <p class="eyebrow">GEN 001 · COLLECTIBLE CHARACTER</p>
+    <h1 class="hero-title">Meet <span class="highlight">Nemo</span></h1>
+    <p class="hero-sub">Round glasses, a good hoodie, and a face that a dozen different artists couldn't resist reinventing. This is his gallery - every variant, every style, all in one place.</p>
+    <a href="#gallery" class="scroll-cta">
+      <span>See every version</span>
+      <span class="scroll-arrow">↓</span>
+    </a>
+  </div>
+
+  <div class="hero-figure">
+    <div class="figure-card">
+      <img src="/images/character-original.png" alt="Nemo, the original character" class="hero-img">
+      <span class="figure-tag">#9584</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY ============ -->
+<section class="gallery" id="gallery">
+  <div class="gallery-header">
+    <p class="eyebrow">THE COLLECTION</p>
+    <h2 class="gallery-title">Every artist. Every take.</h2>
+    <p class="gallery-sub">Tap any card to open the full piece.</p>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-card" id="modalCard" role="dialog" aria-modal="true">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <div class="modal-media">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-info">
+      <span class="modal-num" id="modalNum"></span>
+      <h3 id="modalArtist"></h3>
+      <a class="modal-x" id="modalX" href="" target="_blank" rel="noopener noreferrer"></a>
+      <p class="modal-desc" id="modalDesc"></p>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
