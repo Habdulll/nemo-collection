@@ -251,23 +251,23 @@ const artworks = [
 const X_ICON_SVG = `<svg class="x-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
 
 // ===================== RENDER GRID =====================
-const grid = document.getElementById('grid');
+const grid = document.getElementById("grid");
 
 artworks.forEach((art, i) => {
-  const card = document.createElement('div');
-  card.className = 'card';
+  const card = document.createElement("div");
+  card.className = "card";
   card.tabIndex = 0;
-  card.setAttribute('role', 'button');
-  card.setAttribute('aria-label', `View ${art.artist}'s variant`);
+  card.setAttribute("role", "button");
+  card.setAttribute("aria-label", `View ${art.artist}'s variant`);
 
   const mediaHTML = art.img
     ? `<img src="${art.img}" alt="${art.artist}'s version of Nemo" loading="lazy">`
-    : `<div class="placeholder-fill" style="aspect-ratio:${art.ratio || '1 / 1'};background:${art.color}"></div>`;
+    : `<div class="placeholder-fill" style="aspect-ratio:${art.ratio || "1 / 1"};background:${art.color}"></div>`;
 
   card.innerHTML = `
     <div class="card-media">${mediaHTML}</div>
     <div class="card-body">
-      <span class="card-num">VARIANT ${String(i + 1).padStart(2, '0')}</span>
+      <span class="card-num">VARIANT ${String(i + 1).padStart(2, "0")}</span>
       <h3 class="card-artist">${art.artist}</h3>
       <a class="card-x" href="${art.x}" target="_blank" rel="noopener noreferrer" aria-label="${art.artist} on X">
         ${X_ICON_SVG}<span>View on X</span>
@@ -276,23 +276,28 @@ artworks.forEach((art, i) => {
   `;
 
   // Stop the X link from also triggering the card's own click-to-open-modal
-  card.querySelector('.card-x').addEventListener('click', (e) => e.stopPropagation());
+  card
+    .querySelector(".card-x")
+    .addEventListener("click", (e) => e.stopPropagation());
 
-  card.addEventListener('click', () => openModal(i));
-  card.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openModal(i); }
+  card.addEventListener("click", () => openModal(i));
+  card.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      openModal(i);
+    }
   });
 
   grid.appendChild(card);
 
   // Real images load async — their true height isn't known until they load,
   // so re-measure that one card the moment its image is ready.
-  const imgEl = card.querySelector('img');
+  const imgEl = card.querySelector("img");
   if (imgEl) {
     if (imgEl.complete) {
       layoutCard(card);
     } else {
-      imgEl.addEventListener('load', () => layoutCard(card));
+      imgEl.addEventListener("load", () => layoutCard(card));
     }
   }
 });
@@ -303,30 +308,31 @@ artworks.forEach((art, i) => {
 // without cropping and without gaps between rows.
 function getGridMetrics() {
   const styles = getComputedStyle(grid);
-  const rowHeight = parseFloat(styles.getPropertyValue('grid-auto-rows')) || 8;
-  const rowGap = parseFloat(styles.getPropertyValue('row-gap')) || 0;
+  const rowHeight = parseFloat(styles.getPropertyValue("grid-auto-rows")) || 8;
+  const rowGap = parseFloat(styles.getPropertyValue("row-gap")) || 0;
   return { rowHeight, rowGap };
 }
 
 function layoutCard(card) {
   const { rowHeight, rowGap } = getGridMetrics();
-  const media = card.querySelector('.card-media');
-  const body = card.querySelector('.card-body');
-  const contentHeight = media.getBoundingClientRect().height + body.getBoundingClientRect().height;
+  const media = card.querySelector(".card-media");
+  const body = card.querySelector(".card-body");
+  const contentHeight =
+    media.getBoundingClientRect().height + body.getBoundingClientRect().height;
   const rowSpan = Math.ceil((contentHeight + rowGap) / (rowHeight + rowGap));
   card.style.gridRowEnd = `span ${rowSpan}`;
 }
 
 function layoutAllCards() {
-  document.querySelectorAll('.card').forEach(layoutCard);
+  document.querySelectorAll(".card").forEach(layoutCard);
 }
 
 // Recalculate on load (fonts/images settling) and on resize (column width
 // changes, so image height changes too, since width drives the aspect ratio).
-window.addEventListener('load', layoutAllCards);
+window.addEventListener("load", layoutAllCards);
 
 let resizeTimer;
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(layoutAllCards, 120);
 });
@@ -335,13 +341,13 @@ window.addEventListener('resize', () => {
 layoutAllCards();
 
 // ===================== MODAL =====================
-const backdrop = document.getElementById('modalBackdrop');
-const modalImg = document.getElementById('modalImg');
-const modalNum = document.getElementById('modalNum');
-const modalArtist = document.getElementById('modalArtist');
-const modalX = document.getElementById('modalX');
-const modalDesc = document.getElementById('modalDesc');
-const modalClose = document.getElementById('modalClose');
+const backdrop = document.getElementById("modalBackdrop");
+const modalImg = document.getElementById("modalImg");
+const modalNum = document.getElementById("modalNum");
+const modalArtist = document.getElementById("modalArtist");
+const modalX = document.getElementById("modalX");
+const modalDesc = document.getElementById("modalDesc");
+const modalClose = document.getElementById("modalClose");
 let lastFocused = null;
 
 function openModal(i) {
@@ -350,52 +356,239 @@ function openModal(i) {
 
   if (art.img) {
     modalImg.src = art.img;
-    modalImg.style.display = 'block';
-    modalImg.parentElement.style.background = '';
+    modalImg.style.display = "block";
+    modalImg.parentElement.style.background = "";
   } else {
-    modalImg.style.display = 'none';
+    modalImg.style.display = "none";
     modalImg.parentElement.style.background = art.color;
   }
 
-  modalNum.textContent = `VARIANT ${String(i + 1).padStart(2, '0')}`;
+  modalNum.textContent = `VARIANT ${String(i + 1).padStart(2, "0")}`;
   modalArtist.textContent = art.artist;
   modalX.href = art.x;
   modalX.innerHTML = `${X_ICON_SVG}<span>View on X</span>`;
   modalDesc.textContent = art.desc;
 
-  backdrop.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  backdrop.classList.add("open");
+  document.body.style.overflow = "hidden";
   modalClose.focus();
 }
 
 function closeModal() {
-  backdrop.classList.remove('open');
-  document.body.style.overflow = '';
+  backdrop.classList.remove("open");
+  document.body.style.overflow = "";
   if (lastFocused) lastFocused.focus();
 }
 
-modalClose.addEventListener('click', closeModal);
-backdrop.addEventListener('click', (e) => {
+modalClose.addEventListener("click", closeModal);
+backdrop.addEventListener("click", (e) => {
   if (e.target === backdrop) closeModal();
 });
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && backdrop.classList.contains("open")) closeModal();
 });
 
 // ===================== THEME TOGGLE =====================
 const root = document.documentElement;
-const toggleBtn = document.getElementById('themeToggle');
-const toggleIcon = document.getElementById('toggleIcon');
+const toggleBtn = document.getElementById("themeToggle");
+const toggleIcon = document.getElementById("toggleIcon");
 
 function applyTheme(theme) {
-  root.setAttribute('data-theme', theme);
-  toggleIcon.textContent = theme === 'dark' ? '☾' : '☀';
+  root.setAttribute("data-theme", theme);
+  toggleIcon.textContent = theme === "dark" ? "☾" : "☀";
 }
 
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-applyTheme(prefersDark ? 'dark' : 'light');
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+applyTheme(prefersDark ? "dark" : "light");
 
-toggleBtn.addEventListener('click', () => {
-  const current = root.getAttribute('data-theme');
-  applyTheme(current === 'dark' ? 'light' : 'dark');
+toggleBtn.addEventListener("click", () => {
+  const current = root.getAttribute("data-theme");
+  applyTheme(current === "dark" ? "light" : "dark");
+});
+
+const collageBtn = document.getElementById("collageBtn");
+const collageBackdrop = document.getElementById("collageBackdrop");
+const collageClose = document.getElementById("collageClose");
+const collageCanvas = document.getElementById("collageCanvas");
+const collageStatus = document.getElementById("collageStatus");
+const collageDownload = document.getElementById("collageDownload");
+
+function cssVar(name) {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+}
+
+function parseGradientColors(gradientStr) {
+  const matches = gradientStr.match(/#([0-9a-fA-F]{3,8})/g);
+  return matches && matches.length >= 2 ? matches : ["#cccccc", "#eeeeee"];
+}
+
+function drawRoundedRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+// Crops an image to "cover" a square cell, so mixed image dimensions fill evenly
+function drawCover(ctx, img, x, y, size) {
+  const sw = img.naturalWidth,
+    sh = img.naturalHeight;
+  if (!sw || !sh) return;
+  const scale = Math.max(size / sw, size / sh);
+  const dw = sw * scale,
+    dh = sh * scale;
+  const dx = x + (size - dw) / 2,
+    dy = y + (size - dh) / 2;
+  ctx.save();
+  drawRoundedRect(ctx, x, y, size, size, 16);
+  ctx.clip();
+  ctx.drawImage(img, dx, dy, dw, dh);
+  ctx.restore();
+}
+
+async function buildCollage() {
+  collageStatus.textContent = "Arranging the collection...";
+  collageCanvas.classList.remove("ready");
+  collageDownload.classList.remove("enabled");
+  collageDownload.style.display = "none";
+
+  await document.fonts.ready;
+
+  // EDIT THIS LINE if your gallery cards use a different class name
+  const cards = Array.from(document.querySelectorAll(".card"));
+
+  const targetAspect = 16 / 9;
+  const cols = Math.max(3, Math.ceil(Math.sqrt(cards.length * targetAspect)));
+  const cell = 320;
+  const gap = 28;
+  const labelH = 74;
+  const pad = 48;
+  const headerH = 120;
+  const rows = Math.ceil(cards.length / cols);
+
+  const width = pad * 2 + cols * cell + (cols - 1) * gap;
+  const height =
+    headerH + pad + rows * (cell + labelH) + (rows - 1) * gap + pad;
+
+  const canvas = collageCanvas;
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  const bg = cssVar("--bg") || "#FDFDF9";
+  const surface = cssVar("--surface") || "#FFFFFF";
+  const line = cssVar("--ink") || cssVar("--line") || "#1A1A1A";
+  const text = cssVar("--text") || "#1A1A1A";
+  const textSoft = cssVar("--text-soft") || "#55584f";
+
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.fillStyle = text;
+  ctx.font = "600 40px 'Fredoka', sans-serif";
+  ctx.textBaseline = "top";
+  ctx.fillText("The Collection", pad, 40);
+
+  ctx.fillStyle = textSoft;
+  ctx.font = "14px 'Space Mono', monospace";
+  const dateStr = new Date().toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+  ctx.fillText(`${cards.length} variants · downloaded ${dateStr}`, pad, 88);
+
+  cards.forEach((card, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const x = pad + col * (cell + gap);
+    const y = headerH + pad + row * (cell + labelH + gap);
+
+    ctx.fillStyle = surface;
+    drawRoundedRect(ctx, x, y, cell, cell + labelH, 18);
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = line;
+    drawRoundedRect(ctx, x, y, cell, cell + labelH, 18);
+    ctx.stroke();
+
+    // EDIT THIS SELECTOR if your image lives at a different path in the card
+    const imgEl = card.querySelector(".card-media img");
+    if (imgEl) {
+      drawCover(ctx, imgEl, x, y, cell);
+    } else {
+      const placeholder = card.querySelector(".placeholder-fill");
+      const bgImage = placeholder
+        ? getComputedStyle(placeholder).backgroundImage
+        : "";
+      const [c1, c2] = parseGradientColors(bgImage);
+      const grad = ctx.createLinearGradient(x, y, x + cell, y + cell);
+      grad.addColorStop(0, c1);
+      grad.addColorStop(1, c2);
+      ctx.save();
+      drawRoundedRect(ctx, x, y, cell, cell, 16);
+      ctx.clip();
+      ctx.fillStyle = grad;
+      ctx.fillRect(x, y, cell, cell);
+      ctx.restore();
+    }
+
+    ctx.strokeStyle = line;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x, y + cell);
+    ctx.lineTo(x + cell, y + cell);
+    ctx.stroke();
+
+    // EDIT THESE SELECTORS to match your artist-name and label elements
+    const artistName = card.querySelector(".card-artist")?.textContent || "";
+    const variantNum = card.querySelector(".card-num")?.textContent || "";
+
+    ctx.fillStyle = textSoft;
+    ctx.font = "11px 'Space Mono', monospace";
+    ctx.fillText(variantNum, x + 18, y + cell + 14);
+
+    ctx.fillStyle = text;
+    ctx.font = "600 20px 'Fredoka', sans-serif";
+    ctx.fillText(artistName, x + 18, y + cell + 34);
+  });
+
+  ctx.fillStyle = textSoft;
+  ctx.font = "12px 'Space Mono', monospace";
+  ctx.textAlign = "right";
+  ctx.fillText("generated from the gallery", width - pad, height - 28);
+  ctx.textAlign = "left";
+
+  canvas.classList.add("ready");
+  collageStatus.textContent = "Ready — tap below to save it.";
+
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    collageDownload.href = url;
+    collageDownload.style.display = "inline-flex";
+    collageDownload.classList.add("enabled");
+  }, "image/png");
+}
+
+collageBtn.addEventListener("click", () => {
+  collageBackdrop.classList.add("open");
+  document.body.style.overflow = "hidden";
+  buildCollage();
+});
+
+collageClose.addEventListener("click", () => {
+  collageBackdrop.classList.remove("open");
+  document.body.style.overflow = "";
+});
+
+collageBackdrop.addEventListener("click", (e) => {
+  if (e.target === collageBackdrop) {
+    collageBackdrop.classList.remove("open");
+    document.body.style.overflow = "";
+  }
 });
