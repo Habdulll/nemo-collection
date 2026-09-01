@@ -92,6 +92,13 @@ const artworks = [
     desc: "",
   },
   {
+    artist: "Roland",
+    x: "https://x.com/RolandTA_",
+    color: "linear-gradient(135deg, #FFAECD, #8FDCF7)",
+    img: "/images/roland.jpg",
+    desc: "",
+  },
+  {
     artist: "Layo",
     x: "https://x.com/little_ms_xtra",
     color: "linear-gradient(135deg, #FFAECD, #8FDCF7)",
