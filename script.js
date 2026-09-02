@@ -102,7 +102,7 @@ const artworks = [
     artist: "Kurosaki",
     x: "https://x.com/Dejiiszn",
     color: "linear-gradient(135deg, #FFAECD, #8FDCF7)",
-    img: "/images/kuro.jpg",
+    img: "/images/kuro.jpeg",
     desc: "",
   },
   {
