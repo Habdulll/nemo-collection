@@ -385,3 +385,21 @@ h1, h2, h3 { font-family: 'Fredoka', sans-serif; margin: 0; }
 .collage-actions { width: 100%; display: flex; justify-content: center; }
 .collage-download { pointer-events: none; opacity: 0.5; }
 .collage-download.enabled { pointer-events: auto; opacity: 1; }
+
+.card-media::after {
+  content: "";
+  position: absolute;
+  top: -150%;
+  left: -150%;
+  width: 400%;
+  height: 400%;
+  background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.55) 50%, transparent 60%);
+  transform: rotate(25deg) translateX(-60%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.card:hover .card-media::after {
+  transform: rotate(25deg) translateX(60%);
+}

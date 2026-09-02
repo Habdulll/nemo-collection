@@ -99,6 +99,20 @@ const artworks = [
     desc: "",
   },
   {
+    artist: "Kurosaki",
+    x: "https://x.com/Dejiiszn",
+    color: "linear-gradient(135deg, #FFAECD, #8FDCF7)",
+    img: "/images/kuro.jpg",
+    desc: "",
+  },
+  {
+    artist: "Kurosaki",
+    x: "https://x.com/Dejiiszn",
+    color: "linear-gradient(135deg, #FFAECD, #8FDCF7)",
+    img: "/images/kuro.png",
+    desc: "",
+  },
+  {
     artist: "Layo",
     x: "https://x.com/little_ms_xtra",
     color: "linear-gradient(135deg, #FFAECD, #8FDCF7)",
